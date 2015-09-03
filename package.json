@@ -1,0 +1,9 @@
+{
+  "name": "linksbookmark-for-tumblr",
+  "description": "Extract links to bookmarks for tumblr blog",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "tumblr.js": "*"
+  }
+}
