@@ -120,9 +120,9 @@ function getLinks(runningNumber,offSetValue,_callback){
                         for(var post =0; post < data.posts.length; post++){
 					
 				var postTitle =  data.posts[post].title;
-				var postURL = "<a href='"+ data.posts[post].post_url + "'>"+data.posts[post].post_url +"</a>";
+				var URL = "<a href='"+ data.posts[post].url + "'>"+data.posts[post].url +"</a>";
  
-                                links = links + ("<li>" + postTitle +" "+ postURL + "</li>");
+                                links = links + ("<li>" + postTitle +" "+ URL + "</li>");
                         }
 
                         _callback(links);
