@@ -1,12 +1,13 @@
 
 var tumblr = require('tumblr.js');
 var client = tumblr.createClient({
-  consumer_key: 'your-tumblr-consumer-key'
+  consumer_key: 'your-tumblr-api-consumer-key'
 });
-var tumblrSiteUrl = "your-tumblr-blog-site.com";
+var tumblrSiteUrl = "your-tumblr-site-url";
 
 //Lets require/import the HTTP module
 var http = require('http');
+var qs = require('querystring');
 
 //Lets define a port we want to listen to
 const PORT=8080; 
@@ -15,7 +16,14 @@ const PORT=8080;
 var tumblrData ="";
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-   	 
+   	
+	var str = request.url.split('?')[1];
+	var queryStringObj = qs.parse(str);	
+	if(queryStringObj){
+		if(queryStringObj.tumblrurl){
+			tumblrSiteUrl = queryStringObj.tumblrurl;
+		}
+	}
 	callTumblr(function(result){
 		//console.log('result: '+ result);		
      		response.writeHeader(200, {"Content-Type": "text/html"});  
@@ -32,7 +40,8 @@ var server = http.createServer(handleRequest);
 //Lets start our server
 server.listen(PORT, function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
+    console.log("Server listening on: http://localhost:%s ",PORT);
+	console.log("You can specify tumblrurl. e.g http://localhost:%s/?tumblrurl=helloworld.tumblr.com", PORT);
 });
 
 function callTumblr(_callback){
@@ -46,6 +55,7 @@ client.posts(tumblrSiteUrl, { type: 'link', limit: 1 }, function (err, data) {
   if(err){
 	blogPostCount = 0;  
 	console.log(err);
+	_callback("make sure your tumblr site is correct! You can specify tumblrurl. e.g http://localhost:%s/?tumblrurl=helloworld.tumblr.com");
   }else{
       blogPostCount=	data.total_posts;
     	
