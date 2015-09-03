@@ -24,6 +24,7 @@ function handleRequest(request, response){
 			tumblrSiteUrl = queryStringObj.tumblrurl;
 		}
 	}
+    
 	callTumblr(function(result){
 		//console.log('result: '+ result);		
      		response.writeHeader(200, {"Content-Type": "text/html"});  
@@ -56,11 +57,16 @@ client.posts(tumblrSiteUrl, { type: 'link', limit: 1 }, function (err, data) {
 	blogPostCount = 0;  
 	console.log(err);
 	_callback("make sure your tumblr site is correct! You can specify tumblrurl. e.g http://localhost:%s/?tumblrurl=helloworld.tumblr.com");
-  }else{
+  }else 
+  {
       blogPostCount=	data.total_posts;
     	
+      if(blogPostCount ==0){
+	_callback("No link posts are found or the tumblr blog does not open for query...Sorry...");      
+      }
   }
 
+    
 	console.log(blogPostCount);
 
 	 getAllLinks(blogPostCount, 20,function(result){
