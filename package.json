@@ -3,6 +3,9 @@
   "description": "Extract links to bookmarks for tumblr blog",
   "version": "0.0.1",
   "main":"server.js",
+  "scripts":{
+    "start": "node server.js"
+  },
   "private": true,
   "dependencies": {
     "tumblr.js": "*"
