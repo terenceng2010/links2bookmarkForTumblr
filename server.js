@@ -1,3 +1,7 @@
+require('es6-shim');
+
+//to netscape format html
+var netscape = require('netscape-bookmarks');
 
 var tumblr = require('tumblr.js');
 var client = tumblr.createClient({
@@ -8,6 +12,8 @@ var tumblrSiteUrl = "your-tumblr-site-url";
 //Lets require/import the HTTP module
 var http = require('http');
 var qs = require('querystring');
+
+
 
 //Lets define a port we want to listen to
 const PORT=8080; 
@@ -26,10 +32,17 @@ function handleRequest(request, response){
 	}
     
 	callTumblr(function(result){
-		//console.log('result: '+ result);		
+		
      		response.writeHeader(200, {"Content-Type": "text/html"});  
-     		response.write("<head><meta charset='UTF-8'/></head>");
-		response.write("<ol>"+result+"</ol>");
+
+			
+		if (typeof result === 'string' || result instanceof String){
+     		response.write("<head><meta charset='UTF-8'/></head>");			
+			response.write(result);			
+		}else{
+			response.write(netscape(result));			
+		}
+
 		response.end();
 	});
 	 
@@ -85,7 +98,7 @@ client.posts(tumblrSiteUrl, { type: 'link', limit: 1 }, function (err, data) {
 
 function getAllLinks(blogPostCount, offSetValue, _callback){
 	
-	var allLinks ="";
+	var allLinks ={};
 	var runningNumber;
 	var isComplete = false;	
 	var ajaxCallRemain = Math.ceil(blogPostCount/offSetValue);
@@ -94,8 +107,8 @@ function getAllLinks(blogPostCount, offSetValue, _callback){
 	for(runningNumber =0; runningNumber < blogPostCount; runningNumber += offSetValue){
 
         		getLinks(runningNumber,offSetValue,function(result){
-                		//console.log(result);
-                		allLinks += result;
+                		console.log(result);
+                		Object.assign(allLinks , result);
 				
 				ajaxCallRemain--;
 				if(ajaxCallRemain <=0){
@@ -115,7 +128,7 @@ function getAllLinks(blogPostCount, offSetValue, _callback){
 
 function getLinks(runningNumber,offSetValue,_callback){
 
-        var links ="";
+        var links ={};
         client.posts(tumblrSiteUrl, { type: 'link', limit: 20, offset: runningNumber }, function (err, data) {
 
                 if(err){
@@ -124,11 +137,13 @@ function getLinks(runningNumber,offSetValue,_callback){
                 }else{
 
                         for(var post =0; post < data.posts.length; post++){
-					
+				
+				
 				var postTitle =  data.posts[post].title;
-				var URL = "<a href='"+ data.posts[post].url + "'>"+data.posts[post].url +"</a>";
+				var URL = data.posts[post].url ;
  
-                                links = links + ("<li>" + postTitle +" "+ URL + "</li>");
+				links[postTitle] = URL;
+                                //links = links + ("<li>" + postTitle +" "+ URL + "</li>");
                         }
 
                         _callback(links);

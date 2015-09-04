@@ -8,6 +8,8 @@
   },
   "private": true,
   "dependencies": {
-    "tumblr.js": "*"
+    "tumblr.js": "*",
+	"es6-shim": "*",
+	"netscape-bookmarks": "*"
   }
 }
