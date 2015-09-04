@@ -6,4 +6,4 @@ An example deployed version can be played at http://links2bookmarksfortumblr.her
 
 note that tumblr.com can be ommited i.e http://links2bookmarksfortumblr.herokuapp.com/?tumblrurl=what is still valid.
 
-note that to get the proper bookmark output, right click --> view page source --> copy the page source content to a html file. Or the output would not be read by Chrome.
+note that to get the proper bookmark output, right click --> view page source --> copy & paste the page source content to an empty html file. Or the output would not be read by Chrome.
